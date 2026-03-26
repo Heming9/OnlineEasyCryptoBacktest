@@ -185,7 +185,7 @@ export const AccountStatus: React.FC<AccountStatusProps> = ({
       {showTrades && tradeRecords.length > 0 && (
         <div>
           <h3 className="text-md font-medium text-white mb-3">成交记录</h3>
-          <div className="max-h-64 overflow-auto">
+          <div className="max-h-64 overflow-auto scrollbar-hide-hover">
             <table className="w-full text-sm min-w-[600px]">
               <thead className="text-gray-400 sticky top-0 bg-gray-800">
                 <tr>
@@ -250,6 +250,25 @@ export const AccountStatus: React.FC<AccountStatusProps> = ({
               </tbody>
             </table>
           </div>
+          <style>{`
+            .scrollbar-hide-hover::-webkit-scrollbar {
+              width: 6px;
+              height: 6px;
+            }
+            .scrollbar-hide-hover::-webkit-scrollbar-track {
+              background: transparent;
+            }
+            .scrollbar-hide-hover::-webkit-scrollbar-thumb {
+              background: rgba(107, 114, 128, 0);
+              border-radius: 3px;
+            }
+            .scrollbar-hide-hover:hover::-webkit-scrollbar-thumb {
+              background: rgba(107, 114, 128, 0.5);
+            }
+            .scrollbar-hide-hover::-webkit-scrollbar-thumb:hover {
+              background: rgba(107, 114, 128, 0.7);
+            }
+          `}</style>
         </div>
       )}
     </div>

@@ -6,6 +6,13 @@ interface PlaybackControlsProps {
   onPeriodChange?: (index: number) => void;
 }
 
+const SPEED_OPTIONS = [
+  { label: '0.5s', value: 500 },
+  { label: '1s', value: 1000 },
+  { label: '3s', value: 3000 },
+  { label: '5s', value: 5000 },
+];
+
 export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
   onPeriodChange,
 }) => {
@@ -16,6 +23,10 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
     replay,
     nextPeriod,
     previousPeriod,
+    isLoadingMore,
+    hasMoreData,
+    playbackSpeed,
+    setPlaybackSpeed,
   } = useBacktestStore();
 
   const {
@@ -35,10 +46,10 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
 
     const timer = setInterval(() => {
       nextPeriod();
-    }, 5000); // 5 seconds per period
+    }, playbackSpeed);
 
     return () => clearInterval(timer);
-  }, [isPlaying, currentPeriodIndex, totalPeriods, nextPeriod, pause]);
+  }, [isPlaying, currentPeriodIndex, totalPeriods, nextPeriod, pause, playbackSpeed]);
 
   // Notify parent of period change
   useEffect(() => {
@@ -89,6 +100,10 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
           <span>进度</span>
           <span>
             {currentPeriodIndex + 1} / {totalPeriods}
+            {isLoadingMore && <span className="text-yellow-400 ml-2">(加载中...)</span>}
+            {!hasMoreData && currentPeriodIndex >= totalPeriods - 1 && (
+              <span className="text-gray-500 ml-2">(已结束)</span>
+            )}
           </span>
         </div>
         <div className="w-full bg-gray-700 rounded-full h-2">
@@ -182,9 +197,24 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
         </button>
       </div>
 
-      {/* Speed Info */}
-      <div className="text-center text-xs text-gray-500">
-        播放速度：每 5 秒一个周期
+      {/* Speed Control */}
+      <div className="flex items-center justify-center gap-2">
+        <span className="text-xs text-gray-400">播放速度：</span>
+        <div className="flex gap-1">
+          {SPEED_OPTIONS.map((option) => (
+            <button
+              key={option.value}
+              onClick={() => setPlaybackSpeed(option.value)}
+              className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                playbackSpeed === option.value
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
