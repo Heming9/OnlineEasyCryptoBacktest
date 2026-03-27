@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { createChart, IChartApi, CandlestickData, CandlestickSeries } from 'lightweight-charts';
 import type { KlineData } from '../types';
-import dayjs from 'dayjs';
 
 interface KlineChartProps {
   data: KlineData[];

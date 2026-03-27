@@ -52,7 +52,7 @@ interface BacktestStore {
   updateSettings: (settings: Partial<BacktestSettings>) => void;
   
   // Backtest control actions
-  setKlineData: (data: KlineData[]) => void;
+  setKlineData: (data: KlineData[], loadConfig?: { symbol: string; timeFrame: string; nextStartTime: number; endTime: number } | null) => void;
   appendKlineData: (data: KlineData[]) => void;
   setStrategy: (strategy: Strategy | null) => void;
   setInitialCapital: (capital: number) => void;

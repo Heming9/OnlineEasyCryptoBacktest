@@ -57,24 +57,6 @@ export function getTimeFrameInterval(timeFrame: TimeFrame): string {
   return mapping[timeFrame];
 }
 
-/**
- * 计算周期的毫秒数
- */
-function getPeriodMilliseconds(timeFrame: TimeFrame): number {
-  switch (timeFrame) {
-    case '1h':
-      return 60 * 60 * 1000; // 1 小时
-    case '1d':
-      return 24 * 60 * 60 * 1000; // 1 天
-    case '1w':
-      return 7 * 24 * 60 * 60 * 1000; // 1 周
-    case '1M':
-      return 30 * 24 * 60 * 60 * 1000; // 1 月（按 30 天计算）
-    default:
-      return 24 * 60 * 60 * 1000;
-  }
-}
-
 export async function fetchKlineData(
   symbol: string,
   timeFrame: TimeFrame,

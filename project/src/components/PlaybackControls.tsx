@@ -25,8 +25,6 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
     replay,
     nextPeriod,
     previousPeriod,
-    isLoadingMore,
-    hasMoreData,
     playbackSpeed,
     setPlaybackSpeed,
   } = useBacktestStore();
@@ -36,6 +34,8 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
     currentPeriodIndex,
     totalPeriods,
     klineData,
+    isLoadingMore,
+    hasMoreData,
   } = backtestState;
 
   // Auto-play effect

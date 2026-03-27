@@ -8,27 +8,6 @@ interface AccountStatusProps {
   showTrades?: boolean;
 }
 
-const OPERATOR_LABELS: Record<string, string> = {
-  greater: '>',
-  less: '<',
-  greaterOrEqual: '≥',
-  lessOrEqual: '≤',
-};
-
-const VARIABLE_LABELS: Record<string, string> = {
-  open: '开盘价',
-  close: '收盘价',
-  high: '最高价',
-  low: '最低价',
-  volume: '成交量',
-  equity: '当前权益',
-  availableFunds: '可用资金',
-  position: '持仓数量',
-  floatingPnL: '浮盈亏',
-  floatingPnLPercent: '浮盈亏率',
-  positionRatio: '持仓占比',
-};
-
 export const AccountStatus: React.FC<AccountStatusProps> = ({
   showTrades = true,
 }) => {
