@@ -1,5 +1,7 @@
 # Crypto Market Backtesting Platform
 
+You can try this demo in https://heming9.github.io/simple-crypto-backtest
+
 Trading strategy backtesting and analysis tool based on historical data, with support for Chinese and English interfaces.
 
 ## Features
@@ -10,6 +12,10 @@ Trading strategy backtesting and analysis tool based on historical data, with su
 - ⏯️ **Backtest Controls**：Support for play, pause, fast-forward, speed adjustment, and more
 - 📊 **Trade Records**：Detailed record of each trade, including buy/sell count statistics
 - 🌍 **Internationalization**：Support for Chinese and English interface switching
+
+Preview: 
+<img width="1320" height="724" alt="image" src="https://github.com/user-attachments/assets/a8600f33-34df-42d3-8886-16d46e880e95" />
+
 
 ## Tech Stack
 
