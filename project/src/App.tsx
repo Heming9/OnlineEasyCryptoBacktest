@@ -45,6 +45,12 @@ function App() {
     setShowCapitalInput(false);
   };
 
+  const handleResetToMarketSelector = () => {
+    setDataLoaded(false);
+    setShowCapitalInput(true);
+    setShowStrategyConfig(false);
+  };
+
   return (
     <div className="min-h-screen bg-gray-900">
       {/* Header */}
@@ -74,15 +80,24 @@ function App() {
               <MarketDataSelector onDataLoaded={handleDataLoaded} />
             )}
 
-            {/* Strategy Configurator Toggle */}
+            {/* Strategy Configurator Toggle & Reset Button */}
             {dataLoaded && (
               <>
-                <button
-                  onClick={() => setShowStrategyConfig(!showStrategyConfig)}
-                  className="w-full py-2 bg-gray-800 text-white rounded hover:bg-gray-700 font-medium"
-                >
-                  {showStrategyConfig ? '隐藏策略配置' : '显示策略配置'}
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowStrategyConfig(!showStrategyConfig)}
+                    className="flex-1 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 font-medium"
+                  >
+                    {showStrategyConfig ? '隐藏策略配置' : '显示策略配置'}
+                  </button>
+                  <button
+                    onClick={handleResetToMarketSelector}
+                    className="px-4 py-2 bg-red-900/50 text-red-400 rounded hover:bg-red-900 font-medium border border-red-800"
+                    title="返回市场数据选择页面"
+                  >
+                    ← 返回
+                  </button>
+                </div>
 
                 {showStrategyConfig && (
                   <StrategyConfigurator onSave={handleStrategySave} />
