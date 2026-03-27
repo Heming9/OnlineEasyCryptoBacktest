@@ -1,6 +1,6 @@
 # 加密市场回测平台
 
-您可以在这尝试此DEMO https://heming9.github.io/simple-crypto-backtest
+您可以在这尝试此DEMO https://heming9.github.io/OnlineEasyCryptoBacktest
 
 基于历史数据的交易策略回测分析工具，支持中文和英文界面。
 
