@@ -1,0 +1,137 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "back": "Back",
+    "reset": "Reset"
+  },
+  "header": {
+    "title": "Crypto Market Backtesting Platform",
+    "subtitle": "Trading strategy backtesting and analysis based on historical data"
+  },
+  "marketDataSelector": {
+    "title": "Market Data Selection",
+    "selectAsset": "Select Asset",
+    "selectTimeFrame": "Select Time Frame",
+    "selectStartTime": "Select Start Time",
+    "startBacktest": "Start Backtest",
+    "loadingData": "Loading data...",
+    "initialCapital": "Initial Capital"
+  },
+  "strategyConfigurator": {
+    "title": "Strategy Configuration",
+    "strategyName": "Strategy Name",
+    "defaultStrategyName": "My Strategy",
+    "buyConditions": "Buy Conditions",
+    "sellConditions": "Sell Conditions",
+    "addCondition": "Add Condition",
+    "addGroup": "Add Condition Group",
+    "conditionGroup": "Condition Group",
+    "deleteGroup": "Delete Group",
+    "buyConfig": "Buy Trade Config",
+    "sellConfig": "Sell Trade Config",
+    "amountType": "Amount Type",
+    "byAmount": "By Amount",
+    "byQuantity": "By Quantity",
+    "byRatio": "By Ratio",
+    "buyAmountHint": "Buy fixed amount (USDT)",
+    "buyQuantityHint": "Buy fixed quantity",
+    "buyRatioHint": "Buy percentage of available funds (%)",
+    "sellAmountHint": "Sell fixed amount (USDT)",
+    "sellQuantityHint": "Sell fixed quantity",
+    "sellRatioHint": "Sell percentage of position (%)",
+    "saveSuccess": "Strategy saved successfully!",
+    "saveStrategy": "Save Strategy",
+    "hideConfig": "Hide Strategy Config",
+    "showConfig": "Show Strategy Config"
+  },
+  "accountStatus": {
+    "title": "Account Status",
+    "currentEquity": "Current Equity",
+    "availableFunds": "Available Funds",
+    "position": "Position",
+    "realizedPnL": "Realized PnL",
+    "realizedPnLPercent": "Realized Return",
+    "floatingPnL": "Floating PnL",
+    "floatingPnLPercent": "Floating PnL %",
+    "positionRatio": "Position Ratio",
+    "currentStrategy": "Current Strategy",
+    "tradeRecords": "Trade Records",
+    "time": "Time",
+    "type": "Type",
+    "price": "Price",
+    "quantity": "Quantity",
+    "tradeValue": "Trade Value",
+    "profit": "Profit",
+    "buy": "Buy",
+    "sell": "Sell",
+    "totalBuys": "Buys",
+    "totalSells": "Sells",
+    "totalTrades": "Total",
+    "elapsedTime": "Elapsed Time",
+    "hours": "hours",
+    "days": "days",
+    "weeks": "weeks"
+  },
+  "playbackControls": {
+    "title": "Backtest Controls",
+    "play": "Play",
+    "pause": "Pause",
+    "replay": "Replay",
+    "previous": "Previous",
+    "next": "Next",
+    "speed": "Playback Speed",
+    "progress": "Progress",
+    "currentPeriod": "Current Period"
+  },
+  "klineChart": {
+    "title": "K-line Chart",
+    "timeFrame": "Time Frame",
+    "backtestSegment": "Backtest Segment",
+    "noData": "Please select market data to start backtesting",
+    "noDataHint": "Select asset, time frame, and time range in the left panel"
+  },
+  "initialCapitalInput": {
+    "title": "Set Initial Capital",
+    "placeholder": "Enter initial capital",
+    "invalidAmount": "Please enter a valid amount",
+    "submit": "Confirm"
+  },
+  "timeFrame": {
+    "1h": "1 Hour",
+    "1d": "1 Day",
+    "1w": "1 Week",
+    "1M": "1 Month"
+  },
+  "variables": {
+    "open": "Open",
+    "close": "Close",
+    "high": "High",
+    "low": "Low",
+    "volume": "Volume",
+    "equity": "Current Equity",
+    "availableFunds": "Available Funds",
+    "position": "Position",
+    "floatingPnL": "Floating PnL",
+    "floatingPnLPercent": "Floating PnL %",
+    "positionRatio": "Position Ratio"
+  },
+  "operators": {
+    "greater": ">",
+    "less": "<",
+    "greaterOrEqual": "≥",
+    "lessOrEqual": "≤"
+  },
+  "logic": {
+    "and": "and",
+    "or": "or"
+  },
+  "footer": {
+    "dataSource": "Data Source",
+    "forLearning": "For learning and research purposes only"
+  }
+}

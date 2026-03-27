@@ -64,20 +64,8 @@ export const KlineChart: React.FC<KlineChartProps> = ({
 
       // 设置时间格式化使用本地时区
       chart.timeScale().applyOptions({
-        tickMarkFormatter: (time: any) => {
-          const date = dayjs(time * 1000);
-          return date.format('MM-DD');
-        },
         timeVisible: true,
         secondsVisible: false,
-      });
-
-      // 自定义十字准星时间显示
-      chart.subscribeCrosshairMove((param) => {
-        if (param.time) {
-          const date = dayjs(param.time * 1000);
-          console.log('十字准星时间（本地）:', date.format('YYYY-MM-DD HH:mm:ss'));
-        }
       });
 
       // Create candlestick series

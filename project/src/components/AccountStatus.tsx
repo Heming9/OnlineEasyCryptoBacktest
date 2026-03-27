@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useBacktestStore } from '../store/backtestStore';
 
 import dayjs from 'dayjs';
@@ -31,13 +32,14 @@ const VARIABLE_LABELS: Record<string, string> = {
 export const AccountStatus: React.FC<AccountStatusProps> = ({
   showTrades = true,
 }) => {
+  const { t } = useTranslation();
   const { backtestState, settings } = useBacktestStore();
   const { accountState, tradeRecords, strategy, currentPeriodIndex, klineData } = backtestState;
 
   // 计算已执行时间
   const getElapsedTime = (): string => {
     if (klineData.length === 0 || currentPeriodIndex === 0) {
-      return '0 时';
+      return `0 ${t('accountStatus.hours')}`;
     }
     
     const timeFrame = settings.timeFrame;
@@ -58,49 +60,51 @@ export const AccountStatus: React.FC<AccountStatusProps> = ({
     }
     
     if (hours < 24) {
-      return `${hours} 时`;
+      return `${hours} ${t('accountStatus.hours')}`;
     } else {
       const days = Math.floor(hours / 24);
       const remainingHours = hours % 24;
-      return remainingHours > 0 ? `${days} 天 ${remainingHours} 时` : `${days} 天`;
+      return remainingHours > 0 
+        ? `${days} ${t('accountStatus.days')} ${remainingHours} ${t('accountStatus.hours')}` 
+        : `${days} ${t('accountStatus.days')}`;
     }
   };
 
   return (
     <div className="bg-gray-800 rounded-lg p-4 space-y-4">
-      <h2 className="text-lg font-semibold text-white">账户状态</h2>
+      <h2 className="text-lg font-semibold text-white">{t('accountStatus.title')}</h2>
 
       {/* Core Metrics */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         <div className="bg-gray-700/50 rounded p-3">
-          <p className="text-xs text-gray-400 mb-1">交易耗时</p>
+          <p className="text-xs text-gray-400 mb-1">{t('accountStatus.elapsedTime')}</p>
           <p className="text-lg font-semibold text-white">
             {getElapsedTime()}
           </p>
         </div>
         <div className="bg-gray-700/50 rounded p-3">
-          <p className="text-xs text-gray-400 mb-1">当前权益</p>
+          <p className="text-xs text-gray-400 mb-1">{t('accountStatus.currentEquity')}</p>
           <p className="text-lg font-semibold text-white">
             ${accountState.equity.toFixed(2)}
           </p>
         </div>
 
         <div className="bg-gray-700/50 rounded p-3">
-          <p className="text-xs text-gray-400 mb-1">可用资金</p>
+          <p className="text-xs text-gray-400 mb-1">{t('accountStatus.availableFunds')}</p>
           <p className="text-lg font-semibold text-white">
             ${accountState.availableFunds.toFixed(2)}
           </p>
         </div>
 
         <div className="bg-gray-700/50 rounded p-3">
-          <p className="text-xs text-gray-400 mb-1">持仓数量</p>
+          <p className="text-xs text-gray-400 mb-1">{t('accountStatus.position')}</p>
           <p className="text-lg font-semibold text-white">
             {accountState.position.toFixed(6)}
           </p>
         </div>
 
         <div className="bg-gray-700/50 rounded p-3">
-          <p className="text-xs text-gray-400 mb-1">已实现盈亏</p>
+          <p className="text-xs text-gray-400 mb-1">{t('accountStatus.realizedPnL')}</p>
           <p
             className={`text-lg font-semibold ${
               accountState.realizedPnL >= 0 ? 'text-green-400' : 'text-red-400'
@@ -111,7 +115,7 @@ export const AccountStatus: React.FC<AccountStatusProps> = ({
         </div>
 
         <div className="bg-gray-700/50 rounded p-3">
-          <p className="text-xs text-gray-400 mb-1">已实现收益率</p>
+          <p className="text-xs text-gray-400 mb-1">{t('accountStatus.realizedPnLPercent')}</p>
           <p
             className={`text-lg font-semibold ${
               accountState.realizedPnLPercent >= 0
@@ -124,7 +128,7 @@ export const AccountStatus: React.FC<AccountStatusProps> = ({
         </div>
 
         <div className="bg-gray-700/50 rounded p-3">
-          <p className="text-xs text-gray-400 mb-1">浮盈亏</p>
+          <p className="text-xs text-gray-400 mb-1">{t('accountStatus.floatingPnL')}</p>
           <p
             className={`text-lg font-semibold ${
               accountState.floatingPnL >= 0 ? 'text-green-400' : 'text-red-400'
@@ -135,7 +139,7 @@ export const AccountStatus: React.FC<AccountStatusProps> = ({
         </div>
 
         <div className="bg-gray-700/50 rounded p-3">
-          <p className="text-xs text-gray-400 mb-1">浮盈亏率</p>
+          <p className="text-xs text-gray-400 mb-1">{t('accountStatus.floatingPnLPercent')}</p>
           <p
             className={`text-lg font-semibold ${
               accountState.floatingPnLPercent >= 0
@@ -148,7 +152,7 @@ export const AccountStatus: React.FC<AccountStatusProps> = ({
         </div>
 
         <div className="bg-gray-700/50 rounded p-3">
-          <p className="text-xs text-gray-400 mb-1">持仓占比</p>
+          <p className="text-xs text-gray-400 mb-1">{t('accountStatus.positionRatio')}</p>
           <p className="text-lg font-semibold text-white">
             {(accountState.positionRatio * 100).toFixed(2)}%
           </p>
@@ -158,20 +162,20 @@ export const AccountStatus: React.FC<AccountStatusProps> = ({
       {/* Strategy Summary */}
       {strategy && (
         <div className="bg-gray-700/30 rounded p-3">
-          <h3 className="text-sm font-medium text-white mb-2">当前策略: {strategy.name}</h3>
+          <h3 className="text-sm font-medium text-white mb-2">{t('accountStatus.currentStrategy')}: {strategy.name}</h3>
           
           {/* Buy Conditions */}
           {strategy.buyConditions.some(g => g.conditions.length > 0) && (
             <div className="mb-2">
-              <p className="text-xs text-green-400 mb-1">买入条件:</p>
+              <p className="text-xs text-green-400 mb-1">{t('strategyConfigurator.buyConditions')}:</p>
               <div className="text-xs text-gray-300 space-y-1">
-                {strategy.buyConditions.map((group, idx) => (
+                {strategy.buyConditions.map((group) => (
                   group.conditions.length > 0 && (
                     <div key={group.id}>
                       {group.conditions.map((cond, cidx) => (
                         <span key={cond.id}>
-                          {cidx > 0 && <span className="text-gray-500"> {group.logic === 'and' ? '且' : '或'} </span>}
-                          {VARIABLE_LABELS[cond.variable]} {OPERATOR_LABELS[cond.operator]} {cond.value}
+                          {cidx > 0 && <span className="text-gray-500"> {t(`logic.${group.logic}`)} </span>}
+                          {t(`variables.${cond.variable}`)} {t(`operators.${cond.operator}`)} {cond.value}
                         </span>
                       ))}
                     </div>
@@ -179,9 +183,9 @@ export const AccountStatus: React.FC<AccountStatusProps> = ({
                 ))}
               </div>
               <p className="text-xs text-gray-400 mt-1">
-                买入: {strategy.buyConfig.amountType === 'amount' ? `金额 $${strategy.buyConfig.value}` : 
-                       strategy.buyConfig.amountType === 'quantity' ? `数量 ${strategy.buyConfig.value}` :
-                       `资金 ${strategy.buyConfig.value}%`}
+                {t('strategyConfigurator.buyConfig')}: {strategy.buyConfig.amountType === 'amount' ? `${t('strategyConfigurator.amount')} $${strategy.buyConfig.value}` : 
+                       strategy.buyConfig.amountType === 'quantity' ? `${t('strategyConfigurator.quantity')} ${strategy.buyConfig.value}` :
+                       `${t('strategyConfigurator.ratio')} ${strategy.buyConfig.value}%`}
               </p>
             </div>
           )}
@@ -189,15 +193,15 @@ export const AccountStatus: React.FC<AccountStatusProps> = ({
           {/* Sell Conditions */}
           {strategy.sellConditions.some(g => g.conditions.length > 0) && (
             <div>
-              <p className="text-xs text-red-400 mb-1">卖出条件:</p>
+              <p className="text-xs text-red-400 mb-1">{t('strategyConfigurator.sellConditions')}:</p>
               <div className="text-xs text-gray-300 space-y-1">
-                {strategy.sellConditions.map((group, idx) => (
+                {strategy.sellConditions.map((group) => (
                   group.conditions.length > 0 && (
                     <div key={group.id}>
                       {group.conditions.map((cond, cidx) => (
                         <span key={cond.id}>
-                          {cidx > 0 && <span className="text-gray-500"> {group.logic === 'and' ? '且' : '或'} </span>}
-                          {VARIABLE_LABELS[cond.variable]} {OPERATOR_LABELS[cond.operator]} {cond.value}
+                          {cidx > 0 && <span className="text-gray-500"> {t(`logic.${group.logic}`)} </span>}
+                          {t(`variables.${cond.variable}`)} {t(`operators.${cond.operator}`)} {cond.value}
                         </span>
                       ))}
                     </div>
@@ -205,16 +209,11 @@ export const AccountStatus: React.FC<AccountStatusProps> = ({
                 ))}
               </div>
               <p className="text-xs text-gray-400 mt-1">
-                卖出: {strategy.sellConfig.amountType === 'amount' ? `金额 $${strategy.sellConfig.value}` : 
-                        strategy.sellConfig.amountType === 'quantity' ? `数量 ${strategy.sellConfig.value}` :
-                        `持仓 ${strategy.sellConfig.value}%`}
+                {t('strategyConfigurator.sellConfig')}: {strategy.sellConfig.amountType === 'amount' ? `${t('strategyConfigurator.amount')} $${strategy.sellConfig.value}` : 
+                        strategy.sellConfig.amountType === 'quantity' ? `${t('strategyConfigurator.quantity')} ${strategy.sellConfig.value}` :
+                        `${t('strategyConfigurator.ratio')} ${strategy.sellConfig.value}%`}
               </p>
             </div>
-          )}
-          
-          {!strategy.buyConditions.some(g => g.conditions.length > 0) && 
-           !strategy.sellConditions.some(g => g.conditions.length > 0) && (
-            <p className="text-xs text-gray-500">未配置任何条件</p>
           )}
         </div>
       )}
@@ -223,16 +222,16 @@ export const AccountStatus: React.FC<AccountStatusProps> = ({
       {showTrades && tradeRecords.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-md font-medium text-white">成交记录</h3>
+            <h3 className="text-md font-medium text-white">{t('accountStatus.tradeRecords')}</h3>
             <div className="text-xs text-gray-400 space-x-2">
               <span className="text-green-400">
-                买入: {tradeRecords.filter(r => r.type === 'buy').length}
+                {t('accountStatus.totalBuys')}: {tradeRecords.filter(r => r.type === 'buy').length}
               </span>
               <span className="text-red-400">
-                卖出: {tradeRecords.filter(r => r.type === 'sell').length}
+                {t('accountStatus.totalSells')}: {tradeRecords.filter(r => r.type === 'sell').length}
               </span>
               <span className="text-gray-500">
-                总计: {tradeRecords.length}
+                {t('accountStatus.totalTrades')}: {tradeRecords.length}
               </span>
             </div>
           </div>
@@ -240,12 +239,12 @@ export const AccountStatus: React.FC<AccountStatusProps> = ({
             <table className="w-full text-sm min-w-[600px]">
               <thead className="text-gray-400 sticky top-0 bg-gray-800">
                 <tr>
-                  <th className="text-left py-2">时间</th>
-                  <th className="text-left py-2">类型</th>
-                  <th className="text-right py-2">价格</th>
-                  <th className="text-right py-2">数量</th>
-                  <th className="text-right py-2">交易资金</th>
-                  <th className="text-right py-2">盈亏</th>
+                  <th className="text-left py-2">{t('accountStatus.time')}</th>
+                  <th className="text-left py-2">{t('accountStatus.type')}</th>
+                  <th className="text-right py-2">{t('accountStatus.price')}</th>
+                  <th className="text-right py-2">{t('accountStatus.quantity')}</th>
+                  <th className="text-right py-2">{t('accountStatus.tradeValue')}</th>
+                  <th className="text-right py-2">{t('accountStatus.profit')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -270,7 +269,7 @@ export const AccountStatus: React.FC<AccountStatusProps> = ({
                                 : 'bg-red-900/50 text-red-400'
                             }`}
                           >
-                            {record.type === 'buy' ? '买入' : '卖出'}
+                            {t(`accountStatus.${record.type}`)}
                           </span>
                         </td>
                         <td className="text-right py-2 text-gray-300">

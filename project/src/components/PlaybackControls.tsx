@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useBacktestStore } from '../store/backtestStore';
 import dayjs from 'dayjs';
 
@@ -16,6 +17,7 @@ const SPEED_OPTIONS = [
 export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
   onPeriodChange,
 }) => {
+  const { t } = useTranslation();
   const {
     backtestState,
     play,
@@ -92,17 +94,17 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
 
   return (
     <div className="bg-gray-800 rounded-lg p-4 space-y-4">
-      <h2 className="text-lg font-semibold text-white">回测控制</h2>
+      <h2 className="text-lg font-semibold text-white">{t('playbackControls.title') || 'Backtest Controls'}</h2>
 
       {/* Progress Bar */}
       <div className="space-y-2">
         <div className="flex justify-between text-sm text-gray-400">
-          <span>进度</span>
+          <span>{t('playbackControls.progress') || 'Progress'}</span>
           <span>
             {currentPeriodIndex + 1} / {totalPeriods}
-            {isLoadingMore && <span className="text-yellow-400 ml-2">(加载中...)</span>}
+            {isLoadingMore && <span className="text-yellow-400 ml-2">({t('common.loading') || 'Loading...'})</span>}
             {!hasMoreData && currentPeriodIndex >= totalPeriods - 1 && (
-              <span className="text-gray-500 ml-2">(已结束)</span>
+              <span className="text-gray-500 ml-2">(Finished)</span>
             )}
           </span>
         </div>
@@ -118,26 +120,26 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
       {currentKline && (
         <div className="bg-gray-700/50 rounded p-3">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-sm text-gray-400">当前周期</span>
+            <span className="text-sm text-gray-400">{t('playbackControls.currentPeriod') || 'Current Period'}</span>
             <span className="text-sm text-white font-medium">
               {dayjs(currentKline.time).format('YYYY-MM-DD HH:mm')}
             </span>
           </div>
           <div className="grid grid-cols-4 gap-2 text-center">
             <div>
-              <p className="text-xs text-gray-500">开盘</p>
+              <p className="text-xs text-gray-500">{t('variables.open') || 'Open'}</p>
               <p className="text-sm text-white">${currentKline.open.toFixed(2)}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">最高</p>
+              <p className="text-xs text-gray-500">{t('variables.high') || 'High'}</p>
               <p className="text-sm text-green-400">${currentKline.high.toFixed(2)}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">最低</p>
+              <p className="text-xs text-gray-500">{t('variables.low') || 'Low'}</p>
               <p className="text-sm text-red-400">${currentKline.low.toFixed(2)}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">收盘</p>
+              <p className="text-xs text-gray-500">{t('variables.close') || 'Close'}</p>
               <p className="text-sm text-white">${currentKline.close.toFixed(2)}</p>
             </div>
           </div>
@@ -155,7 +157,7 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
               : 'bg-gray-700 text-white hover:bg-gray-600'
           }`}
         >
-          ◀◀ 后退
+          ◀◀ {t('playbackControls.previous') || 'Previous'}
         </button>
 
         <button
@@ -169,7 +171,7 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
               : 'bg-green-600 text-white hover:bg-green-700'
           }`}
         >
-          {isPlaying ? '暂停' : '播放'}
+          {isPlaying ? t('playbackControls.pause') || 'Pause' : t('playbackControls.play') || 'Play'}
         </button>
 
         <button
@@ -181,7 +183,7 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
               : 'bg-gray-700 text-white hover:bg-gray-600'
           }`}
         >
-          前进 ▶▶
+          {t('playbackControls.next') || 'Next'} ▶▶
         </button>
 
         <button
@@ -193,13 +195,13 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
               : 'bg-gray-700 text-white hover:bg-gray-600'
           }`}
         >
-          重播
+          {t('playbackControls.replay') || 'Replay'}
         </button>
       </div>
 
       {/* Speed Control */}
       <div className="flex items-center justify-center gap-2">
-        <span className="text-xs text-gray-400">播放速度：</span>
+        <span className="text-xs text-gray-400">{t('playbackControls.speed') || 'Playback Speed'}：</span>
         <div className="flex gap-1">
           {SPEED_OPTIONS.map((option) => (
             <button

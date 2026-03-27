@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useBacktestStore } from '../store/backtestStore';
 import { fetchKlineData } from '../services/okx';
 import type { Asset, TimeFrame } from '../types';
@@ -19,6 +20,7 @@ const AVAILABLE_ASSETS: Asset[] = [
 export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
   onDataLoaded,
 }) => {
+  const { t } = useTranslation();
   const { settings, updateSettings, setKlineData, setInitialCapital } = useBacktestStore();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -235,11 +237,11 @@ export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
 
   return (
     <div className="bg-gray-800 rounded-lg p-4 space-y-4">
-      <h2 className="text-lg font-semibold text-white">市场数据选择</h2>
+      <h2 className="text-lg font-semibold text-white">{t('marketDataSelector.title')}</h2>
 
       {/* Asset Selection */}
       <div>
-        <label className="block text-sm text-gray-400 mb-2">选择标的</label>
+        <label className="block text-sm text-gray-400 mb-2">{t('marketDataSelector.selectAsset')}</label>
         <select
           value={settings.asset?.symbol || ''}
           onChange={(e) => {
@@ -251,7 +253,7 @@ export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
           }}
           className="w-full bg-gray-700 text-white rounded px-3 py-2 border border-gray-600 focus:outline-none focus:border-blue-500"
         >
-          <option value="">请选择标的</option>
+          <option value="">{t('marketDataSelector.selectAsset')}</option>
           {AVAILABLE_ASSETS.map((asset) => (
             <option key={asset.symbol} value={asset.symbol}>
               {asset.baseAsset}/{asset.quoteAsset}
@@ -262,7 +264,7 @@ export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
 
       {/* Time Frame Selection */}
       <div>
-        <label className="block text-sm text-gray-400 mb-2">时间周期</label>
+        <label className="block text-sm text-gray-400 mb-2">{t('marketDataSelector.selectTimeFrame')}</label>
         <div className="grid grid-cols-3 gap-2">
           {(['1h', '1d', '1w'] as TimeFrame[]).map((tf) => (
             <button
@@ -274,9 +276,7 @@ export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
                   : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
               }`}
             >
-              {tf === '1h' && '小时'}
-              {tf === '1d' && '天'}
-              {tf === '1w' && '周'}
+              {t(`timeFrame.${tf}`)}
             </button>
           ))}
         </div>
@@ -285,9 +285,9 @@ export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
       {/* Start Time */}
       <div>
         <label className="block text-sm text-gray-400 mb-2">
-          开始时间
+          {t('marketDataSelector.selectStartTime')}
           <span className="text-xs text-gray-500 ml-2">
-            ({settings.timeFrame === '1h' ? '精确到小时（分钟固定为 00）' : '精确到日期'})
+            ({settings.timeFrame === '1h' ? '精确到小时' : '精确到日期'})
           </span>
         </label>
         <input
@@ -304,7 +304,7 @@ export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
 
       {/* Initial Capital */}
       <div>
-        <label className="block text-sm text-gray-400 mb-2">初始资产 (USDT)</label>
+        <label className="block text-sm text-gray-400 mb-2">{t('marketDataSelector.initialCapital')} (USDT)</label>
         <input
           type="text"
           value={initialCapitalInput}
@@ -324,7 +324,7 @@ export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
             }
           }}
           className="w-full bg-gray-700 text-white rounded px-3 py-2 border border-gray-600 focus:outline-none focus:border-blue-500"
-          placeholder="请输入初始资产"
+          placeholder={t('initialCapitalInput.placeholder')}
         />
       </div>
 
@@ -358,7 +358,7 @@ export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
             : 'bg-green-600 text-white hover:bg-green-700'
         }`}
       >
-        {isLoading ? '加载中...' : '开始回测'}
+        {isLoading ? t('marketDataSelector.loadingData') : t('marketDataSelector.startBacktest')}
       </button>
     </div>
   );

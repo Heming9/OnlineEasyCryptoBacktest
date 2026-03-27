@@ -1,4 +1,5 @@
-  import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useBacktestStore } from '../store/backtestStore';
 import type {
   Condition,
@@ -12,20 +13,6 @@ import type {
 interface StrategyConfiguratorProps {
   onSave?: (strategy: Strategy) => void;
 }
-
-const VARIABLE_LABELS: Record<VariableType, string> = {
-  open: '开盘价',
-  close: '收盘价',
-  high: '最高价',
-  low: '最低价',
-  volume: '成交量',
-  equity: '当前权益',
-  availableFunds: '可用资金',
-  position: '持仓数量',
-  floatingPnL: '浮盈亏',
-  floatingPnLPercent: '浮盈亏率 (%)',
-  positionRatio: '持仓占比 (%)',
-};
 
 interface ConditionInputProps {
   condition: Condition;
@@ -51,12 +38,12 @@ const ConditionInput: React.FC<ConditionInputProps> = ({
   onUpdate,
   onRemove,
 }) => {
+  const { t } = useTranslation();
   const [inputValue, setInputValue] = useState(
     Object.is(condition.value, -0) ? '0' : condition.value.toString()
   );
   const [isEditing, setIsEditing] = useState(false);
 
-  // 只有在非编辑状态下才同步外部值
   useEffect(() => {
     if (!isEditing) {
       setInputValue(Object.is(condition.value, -0) ? '0' : condition.value.toString());
@@ -65,7 +52,6 @@ const ConditionInput: React.FC<ConditionInputProps> = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    // 只允许输入数字、负号和小数点
     if (val === '' || val === '-' || /^-?\d*\.?\d*$/.test(val)) {
       setInputValue(val);
     }
@@ -89,11 +75,14 @@ const ConditionInput: React.FC<ConditionInputProps> = ({
     }
   };
 
+  const getVariableLabel = (variable: VariableType) => t(`variables.${variable}`);
+  const getOperatorLabel = (operator: Operator) => t(`operators.${operator}`);
+
   return (
     <div className="flex items-center gap-2">
       {condIndex > 0 && (
         <span className="text-xs text-gray-500">
-          {groupLogic === 'and' ? '且' : '或'}
+          {t(`logic.${groupLogic}`)}
         </span>
       )}
 
@@ -106,9 +95,13 @@ const ConditionInput: React.FC<ConditionInputProps> = ({
         }
         className="bg-gray-600 text-white text-sm rounded px-2 py-1 border border-gray-500 focus:outline-none flex-1"
       >
-        {Object.entries(VARIABLE_LABELS).map(([value, label]) => (
+        {Object.keys({
+          open: '', close: '', high: '', low: '', volume: '', 
+          equity: '', availableFunds: '', position: '', 
+          floatingPnL: '', floatingPnLPercent: '', positionRatio: ''
+        }).map((value) => (
           <option key={value} value={value}>
-            {label}
+            {getVariableLabel(value as VariableType)}
           </option>
         ))}
       </select>
@@ -122,10 +115,10 @@ const ConditionInput: React.FC<ConditionInputProps> = ({
         }
         className="bg-gray-600 text-white text-sm rounded px-2 py-1 border border-gray-500 focus:outline-none"
       >
-        <option value="greater">＞</option>
-        <option value="less">＜</option>
-        <option value="greaterOrEqual">≥</option>
-        <option value="lessOrEqual">≤</option>
+        <option value="greater">{getOperatorLabel('greater')}</option>
+        <option value="less">{getOperatorLabel('less')}</option>
+        <option value="greaterOrEqual">{getOperatorLabel('greaterOrEqual')}</option>
+        <option value="lessOrEqual">{getOperatorLabel('lessOrEqual')}</option>
       </select>
 
       <input
@@ -150,10 +143,11 @@ const ConditionInput: React.FC<ConditionInputProps> = ({
 export const StrategyConfigurator: React.FC<StrategyConfiguratorProps> = ({
   onSave,
 }) => {
+  const { t } = useTranslation();
   const { setStrategy, backtestState } = useBacktestStore();
   const savedStrategy = backtestState.strategy;
   
-  const [strategyName, setStrategyName] = useState(savedStrategy?.name || '我的策略');
+  const [strategyName, setStrategyName] = useState(savedStrategy?.name || t('strategyConfigurator.defaultStrategyName'));
   const [buyConditions, setBuyConditions] = useState<ConditionGroup[]>(
     savedStrategy?.buyConditions || [{ id: 'buy-group-1', conditions: [], logic: 'and' }]
   );
@@ -291,8 +285,7 @@ export const StrategyConfigurator: React.FC<StrategyConfiguratorProps> = ({
     setStrategy(strategy);
     onSave?.(strategy);
     
-    // 显示保存成功提示
-    setSaveMessage('策略保存成功！');
+    setSaveMessage(t('strategyConfigurator.saveSuccess'));
     setTimeout(() => setSaveMessage(null), 3000);
   };
 
@@ -308,7 +301,9 @@ export const StrategyConfigurator: React.FC<StrategyConfiguratorProps> = ({
         <div key={group.id} className="bg-gray-700/50 rounded p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-400">条件组 {groupIndex + 1}</span>
+              <span className="text-sm text-gray-400">
+                {t('strategyConfigurator.conditionGroup')} {groupIndex + 1}
+              </span>
               {group.conditions.length > 1 && (
                 <select
                   value={group.logic}
@@ -317,8 +312,8 @@ export const StrategyConfigurator: React.FC<StrategyConfiguratorProps> = ({
                   }
                   className="bg-gray-600 text-white text-xs rounded px-2 py-1 border border-gray-500 focus:outline-none"
                 >
-                  <option value="and">且 (AND)</option>
-                  <option value="or">或 (OR)</option>
+                  <option value="and">{t('logic.and')} (AND)</option>
+                  <option value="or">{t('logic.or')} (OR)</option>
                 </select>
               )}
             </div>
@@ -327,7 +322,7 @@ export const StrategyConfigurator: React.FC<StrategyConfiguratorProps> = ({
                 onClick={() => removeConditionGroup(type, group.id)}
                 className="text-red-400 hover:text-red-300 text-sm"
               >
-                删除组
+                {t('strategyConfigurator.deleteGroup')}
               </button>
             )}
           </div>
@@ -351,7 +346,7 @@ export const StrategyConfigurator: React.FC<StrategyConfiguratorProps> = ({
             onClick={() => addCondition(type, group.id)}
             className="mt-3 text-blue-400 hover:text-blue-300 text-sm"
           >
-            + 添加条件
+            + {t('strategyConfigurator.addCondition')}
           </button>
         </div>
       ))}
@@ -360,18 +355,29 @@ export const StrategyConfigurator: React.FC<StrategyConfiguratorProps> = ({
         onClick={() => addConditionGroup(type)}
         className="w-full py-2 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 text-sm"
       >
-        + 添加条件组
+        + {t('strategyConfigurator.addGroup')}
       </button>
     </div>
   );
 
+  const getBuyHint = () => {
+    if (buyAmountType === 'amount') return t('strategyConfigurator.buyAmountHint');
+    if (buyAmountType === 'quantity') return t('strategyConfigurator.buyQuantityHint');
+    return t('strategyConfigurator.buyRatioHint');
+  };
+
+  const getSellHint = () => {
+    if (sellAmountType === 'amount') return t('strategyConfigurator.sellAmountHint');
+    if (sellAmountType === 'quantity') return t('strategyConfigurator.sellQuantityHint');
+    return t('strategyConfigurator.sellRatioHint');
+  };
+
   return (
     <div className="bg-gray-800 rounded-lg p-4 space-y-6">
-      <h2 className="text-lg font-semibold text-white">策略配置</h2>
+      <h2 className="text-lg font-semibold text-white">{t('strategyConfigurator.title')}</h2>
 
-      {/* Strategy Name */}
       <div>
-        <label className="block text-sm text-gray-400 mb-2">策略名称</label>
+        <label className="block text-sm text-gray-400 mb-2">{t('strategyConfigurator.strategyName')}</label>
         <input
           type="text"
           value={strategyName}
@@ -380,26 +386,24 @@ export const StrategyConfigurator: React.FC<StrategyConfiguratorProps> = ({
         />
       </div>
 
-      {/* Buy Conditions */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-green-400 font-medium">买入条件</h3>
+          <h3 className="text-green-400 font-medium">{t('strategyConfigurator.buyConditions')}</h3>
         </div>
         <ConditionEditor type="buy" groups={buyConditions} />
       </div>
 
-      {/* Buy Amount Configuration */}
       <div className="bg-gray-700/50 rounded p-4">
-        <h4 className="text-sm text-gray-400 mb-3">买入交易配置</h4>
+        <h4 className="text-sm text-gray-400 mb-3">{t('strategyConfigurator.buyConfig')}</h4>
         <div className="grid grid-cols-3 gap-3">
           <select
             value={buyAmountType}
             onChange={(e) => setBuyAmountType(e.target.value as TradeAmountType)}
             className="bg-gray-600 text-white text-sm rounded px-2 py-2 border border-gray-500 focus:outline-none"
           >
-            <option value="amount">按金额</option>
-            <option value="quantity">按数量</option>
-            <option value="ratio">按占比</option>
+            <option value="amount">{t('strategyConfigurator.byAmount')}</option>
+            <option value="quantity">{t('strategyConfigurator.byQuantity')}</option>
+            <option value="ratio">{t('strategyConfigurator.byRatio')}</option>
           </select>
           <input
             type="number"
@@ -410,30 +414,26 @@ export const StrategyConfigurator: React.FC<StrategyConfiguratorProps> = ({
           />
         </div>
         <p className="text-xs text-gray-500 mt-2">
-          {buyAmountType === 'amount' && '买入固定金额 (USDT)'}
-          {buyAmountType === 'quantity' && '买入固定数量'}
-          {buyAmountType === 'ratio' && '买入可用资金的百分比 (%)'}
+          {getBuyHint()}
         </p>
       </div>
 
-      {/* Sell Conditions */}
       <div>
-        <h3 className="text-red-400 font-medium mb-3">卖出条件</h3>
+        <h3 className="text-red-400 font-medium mb-3">{t('strategyConfigurator.sellConditions')}</h3>
         <ConditionEditor type="sell" groups={sellConditions} />
       </div>
 
-      {/* Sell Amount Configuration */}
       <div className="bg-gray-700/50 rounded p-4">
-        <h4 className="text-sm text-gray-400 mb-3">卖出交易配置</h4>
+        <h4 className="text-sm text-gray-400 mb-3">{t('strategyConfigurator.sellConfig')}</h4>
         <div className="grid grid-cols-3 gap-3">
           <select
             value={sellAmountType}
             onChange={(e) => setSellAmountType(e.target.value as TradeAmountType)}
             className="bg-gray-600 text-white text-sm rounded px-2 py-2 border border-gray-500 focus:outline-none"
           >
-            <option value="amount">按金额</option>
-            <option value="quantity">按数量</option>
-            <option value="ratio">按占比</option>
+            <option value="amount">{t('strategyConfigurator.byAmount')}</option>
+            <option value="quantity">{t('strategyConfigurator.byQuantity')}</option>
+            <option value="ratio">{t('strategyConfigurator.byRatio')}</option>
           </select>
           <input
             type="number"
@@ -444,25 +444,21 @@ export const StrategyConfigurator: React.FC<StrategyConfiguratorProps> = ({
           />
         </div>
         <p className="text-xs text-gray-500 mt-2">
-          {sellAmountType === 'amount' && '卖出固定金额 (USDT)'}
-          {sellAmountType === 'quantity' && '卖出固定数量'}
-          {sellAmountType === 'ratio' && '卖出持仓的百分比 (%)'}
+          {getSellHint()}
         </p>
       </div>
 
-      {/* Save Message */}
       {saveMessage && (
         <div className="bg-green-900/50 border border-green-600 text-green-400 px-4 py-2 rounded text-center">
           {saveMessage}
         </div>
       )}
 
-      {/* Save Button */}
       <button
         onClick={handleSave}
         className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 font-medium"
       >
-        保存策略
+        {t('strategyConfigurator.saveStrategy')}
       </button>
     </div>
   );

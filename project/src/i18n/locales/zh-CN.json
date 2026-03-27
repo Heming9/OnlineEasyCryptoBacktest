@@ -1,0 +1,137 @@
+{
+  "common": {
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "save": "保存",
+    "cancel": "取消",
+    "confirm": "确认",
+    "back": "返回",
+    "reset": "重置"
+  },
+  "header": {
+    "title": "加密市场回测平台",
+    "subtitle": "基于历史数据的交易策略回测分析"
+  },
+  "marketDataSelector": {
+    "title": "市场数据选择",
+    "selectAsset": "选择标的",
+    "selectTimeFrame": "选择周期",
+    "selectStartTime": "选择开始时间",
+    "startBacktest": "开始回测",
+    "loadingData": "正在加载数据...",
+    "initialCapital": "初始资金"
+  },
+  "strategyConfigurator": {
+    "title": "策略配置",
+    "strategyName": "策略名称",
+    "defaultStrategyName": "我的策略",
+    "buyConditions": "买入条件",
+    "sellConditions": "卖出条件",
+    "addCondition": "添加条件",
+    "addGroup": "添加条件组",
+    "conditionGroup": "条件组",
+    "deleteGroup": "删除组",
+    "buyConfig": "买入交易配置",
+    "sellConfig": "卖出交易配置",
+    "amountType": "金额类型",
+    "byAmount": "按金额",
+    "byQuantity": "按数量",
+    "byRatio": "按占比",
+    "buyAmountHint": "买入固定金额 (USDT)",
+    "buyQuantityHint": "买入固定数量",
+    "buyRatioHint": "买入可用资金的百分比 (%)",
+    "sellAmountHint": "卖出固定金额 (USDT)",
+    "sellQuantityHint": "卖出固定数量",
+    "sellRatioHint": "卖出持仓的百分比 (%)",
+    "saveSuccess": "策略保存成功！",
+    "saveStrategy": "保存策略",
+    "hideConfig": "隐藏策略配置",
+    "showConfig": "显示策略配置"
+  },
+  "accountStatus": {
+    "title": "账户状态",
+    "currentEquity": "当前权益",
+    "availableFunds": "可用资金",
+    "position": "持仓数量",
+    "realizedPnL": "已实现盈亏",
+    "realizedPnLPercent": "已实现收益率",
+    "floatingPnL": "浮盈亏",
+    "floatingPnLPercent": "浮盈亏率",
+    "positionRatio": "持仓占比",
+    "currentStrategy": "当前策略",
+    "tradeRecords": "成交记录",
+    "time": "时间",
+    "type": "类型",
+    "price": "价格",
+    "quantity": "数量",
+    "tradeValue": "交易资金",
+    "profit": "盈亏",
+    "buy": "买入",
+    "sell": "卖出",
+    "totalBuys": "买入",
+    "totalSells": "卖出",
+    "totalTrades": "总计",
+    "elapsedTime": "已执行时间",
+    "hours": "小时",
+    "days": "天",
+    "weeks": "周"
+  },
+  "playbackControls": {
+    "title": "回测控制",
+    "play": "播放",
+    "pause": "暂停",
+    "replay": "重放",
+    "previous": "上一周期",
+    "next": "下一周期",
+    "speed": "播放速度",
+    "progress": "进度",
+    "currentPeriod": "当前周期"
+  },
+  "klineChart": {
+    "title": "K线图",
+    "timeFrame": "周期",
+    "backtestSegment": "回测片段",
+    "noData": "请选择市场数据开始回测",
+    "noDataHint": "在左侧面板选择资产、时间周期和时间范围"
+  },
+  "initialCapitalInput": {
+    "title": "设置初始资金",
+    "placeholder": "请输入初始资金",
+    "invalidAmount": "请输入有效的金额",
+    "submit": "确认"
+  },
+  "timeFrame": {
+    "1h": "1小时",
+    "1d": "1天",
+    "1w": "1周",
+    "1M": "1月"
+  },
+  "variables": {
+    "open": "开盘价",
+    "close": "收盘价",
+    "high": "最高价",
+    "low": "最低价",
+    "volume": "成交量",
+    "equity": "当前权益",
+    "availableFunds": "可用资金",
+    "position": "持仓数量",
+    "floatingPnL": "浮盈亏",
+    "floatingPnLPercent": "浮盈亏率",
+    "positionRatio": "持仓占比"
+  },
+  "operators": {
+    "greater": ">",
+    "less": "<",
+    "greaterOrEqual": "≥",
+    "lessOrEqual": "≤"
+  },
+  "logic": {
+    "and": "且",
+    "or": "或"
+  },
+  "footer": {
+    "dataSource": "数据来源",
+    "forLearning": "仅供学习研究使用"
+  }
+}
