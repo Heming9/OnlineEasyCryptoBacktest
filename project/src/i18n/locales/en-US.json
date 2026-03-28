@@ -18,6 +18,10 @@
     "selectAsset": "Select Asset",
     "selectTimeFrame": "Select Time Frame",
     "selectStartTime": "Select Start Time",
+    "selectEndTime": "Select End Time",
+    "optional": "Optional",
+    "endTimeCannotExceedCurrent": "End time cannot exceed current time",
+    "endTimeCannotBeEarlierThanStartTime": "End time cannot be earlier than start time",
     "startBacktest": "Start Backtest",
     "loadingData": "Loading data...",
     "initialCapital": "Initial Capital"

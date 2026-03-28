@@ -18,6 +18,10 @@
     "selectAsset": "选择标的",
     "selectTimeFrame": "选择周期",
     "selectStartTime": "选择开始时间",
+    "selectEndTime": "选择结束时间",
+    "optional": "可选",
+    "endTimeCannotExceedCurrent": "结束时间不能大于当前时间",
+    "endTimeCannotBeEarlierThanStartTime": "结束时间不能早于开始时间",
     "startBacktest": "开始回测",
     "loadingData": "正在加载数据...",
     "initialCapital": "初始资金"

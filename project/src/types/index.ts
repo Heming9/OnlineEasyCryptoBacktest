@@ -112,5 +112,6 @@ export interface BacktestSettings {
   asset: Asset | null;
   timeFrame: TimeFrame;
   startTime: number;
+  endTime: number | null;
   initialCapital: number;
 }

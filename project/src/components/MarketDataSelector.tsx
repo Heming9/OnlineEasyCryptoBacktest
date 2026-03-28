@@ -64,7 +64,9 @@ export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
       asset: settings.asset,
       timeFrame: settings.timeFrame,
       startTime: settings.startTime,
+      endTime: settings.endTime,
       startTimeISO: settings.startTime ? new Date(settings.startTime).toISOString() : '未选择',
+      endTimeISO: settings.endTime ? new Date(settings.endTime).toISOString() : '未选择',
     });
 
     if (!settings.asset) {
@@ -81,8 +83,26 @@ export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
       return;
     }
 
-    // 计算结束时间（最多1000个周期）
-    const maxEndTime = getEndTimeFromStartTime(settings.startTime, settings.timeFrame);
+    // 验证结束时间（如果有）
+    if (settings.endTime) {
+      const currentTime = Date.now();
+      if (settings.endTime > currentTime) {
+        const msg = t('marketDataSelector.endTimeCannotExceedCurrent');
+        console.error(msg);
+        setError(msg);
+        return;
+      }
+      
+      if (settings.endTime < settings.startTime) {
+        const msg = t('marketDataSelector.endTimeCannotBeEarlierThanStartTime');
+        console.error(msg);
+        setError(msg);
+        return;
+      }
+    }
+
+    // 计算结束时间（如果用户未指定，则使用默认1000个周期）
+    const maxEndTime = settings.endTime || getEndTimeFromStartTime(settings.startTime, settings.timeFrame);
     // 先加载前100个周期
     const initialEndTime = Math.min(
       settings.startTime + 100 * getPeriodMilliseconds(settings.timeFrame),
@@ -175,7 +195,7 @@ export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
   };
 
   const handleTimeFrameChange = (timeFrame: TimeFrame) => {
-    updateSettings({ timeFrame });
+    updateSettings({ timeFrame, endTime: null });
     // 重置开始时间为今天的 00:00，避免周期切换后时间格式不匹配
     const defaultTime = dayjs().hour(0).minute(0).second(0).millisecond(0).valueOf();
     updateSettings({ startTime: defaultTime });
@@ -229,10 +249,48 @@ export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
     updateSettings({ startTime: time.valueOf() });
   };
 
+  const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (!value) {
+      updateSettings({ endTime: null });
+      return;
+    }
+    
+    let time: dayjs.Dayjs;
+    
+    // 根据周期类型调整时间精度
+    if (settings.timeFrame === '1h') {
+      // 小时周期：输入格式为 YYYY-MM-DDTHH:mm
+      // 分钟固定为 00
+      time = dayjs(value).minute(0).second(0).millisecond(0);
+    } else if (settings.timeFrame === '1d' || settings.timeFrame === '1w') {
+      // 天/周周期：输入格式为 YYYY-MM-DD
+      // 使用 UTC 时间，确保是当天的 00:00:00 UTC
+      time = dayjs.utc(value + 'T00:00:00');
+    } else {
+      time = dayjs(value);
+    }
+    
+    console.log('Selected end time:', {
+      inputValue: value,
+      timestamp: time.valueOf(),
+      isoString: time.toISOString(),
+      timeFrame: settings.timeFrame,
+    });
+    
+    updateSettings({ endTime: time.valueOf() });
+  };
+
   // 点击输入框时触发文件选择器
   const handleInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
     // 确保输入框获得焦点并显示选择器
     (e.target as HTMLInputElement).showPicker?.();
+  };
+
+  // 获取最大可选结束时间（当前时间）
+  const getMaxEndTime = (): string => {
+    const format = getTimeFormat(settings.timeFrame);
+    return dayjs().format(format);
   };
 
   return (
@@ -302,6 +360,27 @@ export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
         />
       </div>
 
+      {/* End Time */}
+      <div>
+        <label className="block text-sm text-gray-400 mb-2">
+          {t('marketDataSelector.selectEndTime')}
+          <span className="text-xs text-gray-500 ml-2">
+            ({t('marketDataSelector.optional')})
+          </span>
+        </label>
+        <input
+          type={settings.timeFrame === '1h' ? 'datetime-local' : 'date'}
+          value={settings.endTime ? formatTimeForInput(settings.endTime, settings.timeFrame) : ''}
+          onChange={handleEndTimeChange}
+          onClick={handleInputClick}
+          max={getMaxEndTime()}
+          className="w-full bg-gray-700 text-white rounded px-3 py-2 border border-gray-600 focus:outline-none focus:border-blue-500 [color-scheme:dark]"
+          style={{
+            cursor: 'pointer',
+          }}
+        />
+      </div>
+
       {/* Initial Capital */}
       <div>
         <label className="block text-sm text-gray-400 mb-2">{t('marketDataSelector.initialCapital')} (USDT)</label>
@@ -333,11 +412,21 @@ export const MarketDataSelector: React.FC<MarketDataSelectorProps> = ({
         <div className="bg-blue-900/20 border border-blue-700 rounded p-3">
           <p className="text-sm text-blue-300">
             <span className="font-medium">提示：</span>
-            从开始时间起最多回测 1000 个周期
+            {settings.endTime 
+              ? '将回测指定时间范围的数据'
+              : '从开始时间起最多回测 1000 个周期'
+            }
           </p>
-          <p className="text-xs text-blue-400 mt-2">
-            预计结束时间：{dayjs(getEndTimeFromStartTime(settings.startTime, settings.timeFrame)).format(getTimeFormat(settings.timeFrame))}
-          </p>
+          {!settings.endTime && (
+            <p className="text-xs text-blue-400 mt-2">
+              预计结束时间：{dayjs(getEndTimeFromStartTime(settings.startTime, settings.timeFrame)).format(getTimeFormat(settings.timeFrame))}
+            </p>
+          )}
+          {settings.endTime && (
+            <p className="text-xs text-blue-400 mt-2">
+              结束时间：{dayjs(settings.endTime).format(getTimeFormat(settings.timeFrame))}
+            </p>
+          )}
         </div>
       )}
 

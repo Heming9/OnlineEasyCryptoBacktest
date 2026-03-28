@@ -106,6 +106,7 @@ export const useBacktestStore = create<BacktestStore>()(
       asset: null,
       timeFrame: '1d',
       startTime: 0,
+      endTime: null,
       initialCapital: 10000,
     },
     backtestState: { ...initialBacktestState },
