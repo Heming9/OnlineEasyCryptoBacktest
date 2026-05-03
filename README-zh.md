@@ -16,7 +16,7 @@
 - 🌍 **国际化**：支持中文和英文界面切换
 
 Preview: 
-<img width="1212" height="718" alt="image" src="https://github.com/user-attachments/assets/5fa7e327-9019-441b-86c5-cdc8036db6ab" />
+<img width="1212" height="718" alt="image" src="https://github.com/Heming9/OnlineEasyCryptoBacktest/blob/main/Pasted%20Graphic%20.png" />
 
 ## 技术栈
 
