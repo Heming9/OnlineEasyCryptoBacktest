@@ -15,7 +15,7 @@ Trading strategy backtesting and analysis tool based on historical data, with su
 - 🌍 **Internationalization**：Support for Chinese and English interface switching
 
 Preview: 
-<img width="1320" height="724" alt="image" src="https://github.com/user-attachments/assets/a8600f33-34df-42d3-8886-16d46e880e95" />
+<img width="1320" height="724" alt="image" src="https://github.com/Heming9/OnlineEasyCryptoBacktest/blob/main/Pasted%20Graphic.png" />
 
 
 ## Tech Stack
